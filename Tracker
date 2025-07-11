@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Link Tracker Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #6b46c1 0%, #3182ce 100%);
+        }
+        .tracking-card {
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .tracking-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-100 font-sans">
+    <!-- Header -->
+    <header class="gradient-bg text-white">
+        <div class="container mx-auto px-4 py-12">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="mb-8 md:mb-0">
+                    <h1 class="text-4xl font-bold mb-2">Link Tracker Pro</h1>
+                    <p class="text-xl opacity-90">Create trackable links with detailed analytics</p>
+                </div>
+                <div class="w-full md:w-auto">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a81bc44c-29b7-4bb5-9f2a-967f794cdf0e.png" alt="Illustration of a detective with magnifying glass analyzing digital links with world map background" class="rounded-lg" />
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <!-- Link Generator Card -->
+            <div class="bg-white p-6 rounded-xl tracking-card">
+                <div class="flex items-center mb-4">
+                    <div class="bg-indigo-100 p-2 rounded-full mr-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                        </svg>
+                    </div>
+                    <h2 class="text-xl font-semibold">Create Tracking Link</h2>
+                </div>
+                <div class="mb-4">
+                    <label for="original-url" class="block text-sm font-medium text-gray-700 mb-1">Original URL</label>
+                    <input type="url" id="original-url" placeholder="https://example.com" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div class="mb-4">
+                    <label for="campaign-name" class="block text-sm font-medium text-gray-700 mb-1">Campaign Name</label>
+                    <input type="text" id="campaign-name" placeholder="Summer Sale" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <button id="generate-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-md transition duration-300">
+                    Generate Tracking Link
+                </button>
+            </div>
+
+            <!-- Generated Link Display -->
+            <div class="bg-white p-6 rounded-xl tracking-card md:col-span-2">
+                <div class="flex items-center mb-4">
+                    <div class="bg-green-100 p-2 rounded-full mr-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h2 class="text-xl font-semibold">Your Tracking Link</h2>
+                </div>
+                <div id="link-display" class="mb-6 bg-gray-50 p-4 rounded-md hidden">
+                    <p class="text-sm text-gray-500 mb-2">Your tracking link:</p>
+                    <div class="flex flex-col sm:flex-row items-center gap-2">
+                        <input id="tracking-link" type="text" readonly class="flex-1 px-3 py-2 border border-gray-300 rounded-l-md bg-white text-sm select-all" value="">
+                        <button id="copy-btn" class="bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-r-md text-sm transition duration-300 whitespace-nowrap">
+                            Copy Link
+                        </button>
+                    </div>
+                    <div class="mt-4 p-3 bg-blue-50 rounded-md text-sm text-blue-800 hidden" id="qr-container">
+                        <p class="mb-2">Scan this QR code to share:</p>
+                        <img id="qr-code" src="" alt="QR code for the generated tracking link" class="w-24 h-24 mx-auto bg-white p-2 rounded border border-gray-200" src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/09886608-36fd-40b6-913f-b0b5a681bb50.png">
+                    </div>
+                </div>
+                
+                <div id="link-instructions" class="p-4 bg-gray-50 rounded-md text-sm text-gray-700">
+                    <p>Enter a URL and click "Generate Tracking Link" to create a trackable version. When someone opens your link, we'll record their:</p>
+                    <ul class="list-disc pl-5 mt-2">
+                        <li>Location (country, region, city)</li>
+                        <li>Device and browser information</li>
+                        <li>Exact time of access</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics Dashboard -->
+        <div id="analytics-section" class="bg-white p-6 rounded-xl tracking-card mb-8">
+            <div class="flex items-center mb-6">
+                <div class="bg-purple-100 p-2 rounded-full mr-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                </div>
+                <h2 class="text-xl font-semibold">Tracking Analytics</h2>
+            </div>
+
+            <div id="analytics-data" class="hidden">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <h3 class="text-sm font-medium text-gray-500 mb-1">Total Clicks</h3>
+                        <p id="total-clicks" class="text-3xl font-bold text-indigo-600">0</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <h3 class="text-sm font-medium text-gray-500 mb-1">Last Accessed</h3>
+                        <p id="last-accessed" class="text-3xl font-bold text-green-600">Never</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <h3 class="text-sm font-medium text-gray-500 mb-1">Top Location</h3>
+                        <p id="top-location" class="text-3xl font-bold text-blue-600">None</p>
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="text-lg font-medium mb-4">Location Map</h3>
+                    <div class="bg-gray-100 rounded-md p-4 h-64 flex items-center justify-center">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/dd406315-f4d4-422b-969b-9a440de1c97a.png" alt="World map visualization showing click locations with pins marking visitor origins" id="map-image" class="max-w-full h-auto">
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-medium mb-4">Detailed Activity</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Device</th>
+                                </tr>
+                            </thead>
+                            <tbody id="activity-body" class="bg-white divide-y divide-gray-200">
+                                <!-- Rows will be added here by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="no-analytics" class="p-8 text-center">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/0602483e-649b-4c88-9515-b9533f928122.png" alt="Empty state illustration showing a magnifying glass searching empty space" class="w-24 h-24 mx-auto mb-4 opacity-50">
+                <p class="text-gray-500">No tracking data yet. Share your link to see analytics here.</p>
+            </div>
+        </div>
+
+        <!-- How It Works Section -->
+        <div class="bg-white p-6 rounded-xl tracking-card">
+            <h2 class="text-xl font-semibold mb-6">How It Works</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <div class="text-indigo-600 mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                        </svg>
+                    </div>
+                    <h3 class="font-medium mb-2">1. Create Your Link</h3>
+                    <p class="text-sm text-gray-600">Paste your destination URL and give it a campaign name to organize your tracking links.</p>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <div class="text-indigo-600 mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                        </svg>
+                    </div>
+                    <h3 class="font-medium mb-2">2. Share Your Link</h3>
+                    <p class="text-sm text-gray-600">Copy the generated tracking URL and share it in emails, social media, or any other marketing channel.</p>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <div class="text-indigo-600 mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
+                    <h3 class="font-medium mb-2">3. View Analytics</h3>
+                    <p class="text-sm text-gray-600">See real-time data on who's clicking your links, where they're located, and when they accessed them.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <h3 class="text-xl font-bold">Link Tracker Pro</h3>
+                    <p class="text-sm text-gray-400">Simple, powerful link tracking for your marketing campaigns</p>
+                </div>
+                <div class="text-sm text-gray-400">
+                    <p>Created with ❤️ for marketers & analysts</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simulated database for demonstration
+        const trackingDatabase = {
+            links: {},
+            generateUniqueId: function() {
+                return 't-' + Math.random().toString(36).substring(2, 9);
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const generateBtn = document.getElementById('generate-btn');
+            const originalUrlInput = document.getElementById('original-url');
+            const campaignNameInput = document.getElementById('campaign-name');
+            const linkDisplay = document.getElementById('link-display');
+            const trackingLinkInput = document.getElementById('tracking-link');
+            const copyBtn = document.getElementById('copy-btn');
+            const qrContainer = document.getElementById('qr-container');
+            const qrCode = document.getElementById('qr-code');
+            const noAnalytics = document.getElementById('no-analytics');
+            const analyticsData = document.getElementById('analytics-data');
+            
+            // Generate tracking link
+            generateBtn.addEventListener('click', function() {
+                const originalUrl = originalUrlInput.value.trim();
+                const campaignName = campaignNameInput.value.trim() || 'Untitled Campaign';
+                
+                if (!originalUrl) {
+                    alert('Please enter a valid URL');
+                    return;
+                }
+                
+                // Generate unique tracking ID
+                const trackingId = trackingDatabase.generateUniqueId();
+                const trackingUrl = window.location.origin + window.location.pathname + '?redirect=' + encodeURIComponent(originalUrl) + '&track=' + trackingId;
+                
+                // Store the tracking link details
+                trackingDatabase.links[trackingId] = {
+                    originalUrl,
+                    campaignName,
+                    clicks: [],
+                    created: new Date()
+                };
+                
+                // Display the tracking link
+                trackingLinkInput.value = trackingUrl;
+                linkDisplay.classList.remove('hidden');
+                qrCode.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(trackingUrl)}`;
+                qrContainer.classList.remove('hidden');
+                
+                // Store in localStorage
+                localStorage.setItem('trackingLinks', JSON.stringify(trackingDatabase.links));
+                
+                // Show analytics section
+                noAnalytics.classList.remove('hidden');
+                analyticsData.classList.add('hidden');
+            });
+            
+            // Copy link to clipboard
+            copyBtn.addEventListener('click', function() {
+                trackingLinkInput.select();
+                document.execCommand('copy');
+                
+                // Update button text temporarily
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = 'Copied!';
+                setTimeout(function() {
+                    copyBtn.textContent = originalText;
+                }, 2000);
+            });
+            
+            // Show analytics if we're coming from a redirect
+            const urlParams = new URLSearchParams(window.location.search);
+            const trackId = urlParams.get('track');
+            const redirectUrl = urlParams.get('redirect');
+            
+            if (trackId && redirectUrl && trackingDatabase.links[trackId]) {
+                // Simulate tracking a click
+                const clickData = {
+                    time: new Date(),
+                    ip: 'simulated', // In a real app, you'd get this from the server
+                    userAgent: navigator.userAgent,
+                    location: getSimulatedLocation()
+                };
+                
+                trackingDatabase.links[trackId].clicks.push(clickData);
+                
+                // Update localStorage
+                localStorage.setItem('trackingLinks', JSON.stringify(trackingDatabase.links));
+                
+                // Redirect to the original URL
+                window.location.href = redirectUrl;
+            }
+            
+            // Load any existing links from localStorage
+            const savedLinks = localStorage.getItem('trackingLinks');
+            if (savedLinks) {
+                trackingDatabase.links = JSON.parse(savedLinks);
+                
+                // If we have links, show analytics for the first one (for demo purposes)
+                const linkIds = Object.keys(trackingDatabase.links);
+                if (linkIds.length > 0) {
+                    const latestLinkId = linkIds[linkIds.length - 1];
+                    displayAnalytics(latestLinkId);
+                    noAnalytics.classList.add('hidden');
+                    analyticsData.classList.remove('hidden');
+                }
+            }
+            
+            // Helper function to display analytics data
+            function displayAnalytics(trackingId) {
+                const linkData = trackingDatabase.links[trackingId];
+                const clicks = linkData.clicks;
+                
+                // Update summary stats
+                document.getElementById('total-clicks').textContent = clicks.length;
+                
+                if (clicks.length > 0) {
+                    const latestClick = clicks[clicks.length - 1];
+                    document.getElementById('last-accessed').textContent = latestClick.time.toLocaleString();
+                    
+                    // Simulate a "top location" by finding most common country
+                    const locations = {};
+                    clicks.forEach(click => {
+                        const country = click.location.country;
+                        locations[country] = (locations[country] || 0) + 1;
+                    });
+                    
+                    if (Object.keys(locations).length > 0) {
+                        const topLocation = Object.entries(locations).reduce((a, b) => a[1] > b[1] ? a : b)[0];
+                        document.getElementById('top-location').textContent = topLocation;
+                    }
+                    
+                    // Update the activity table
+                    const activityBody = document.getElementById('activity-body');
+                    activityBody.innerHTML = '';
+                    
+                    // Show last 10 clicks (most recent first)
+                    const displayClicks = [...clicks].reverse().slice(0, 10);
+                    displayClicks.forEach(click => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${click.time.toLocaleString()}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                <div class="flex items-center">
+                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/cdaa977b-4e4f-48eb-984d-2406eda91a47.png" alt="Flag of ${click.location.country}" class="w-5 h-3 mr-2 inline-block" />
+                                    ${click.location.city}, ${click.location.country}
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                ${getDeviceIcon(click.userAgent)} ${getBrowserName(click.userAgent)} on ${getDeviceType(click.userAgent)}
+                            </td>
+                        `;
+                        activityBody.appendChild(row);
+                    });
+                }
+            }
+            
+            // Helper function to get simulated location data for demo
+            function getSimulatedLocation() {
+                const cities = [
+                    { city: 'New York', country: 'USA' },
+                    { city: 'London', country: 'UK' },
+                    { city: 'Tokyo', country: 'Japan' },
+                    { city: 'Sydney', country: 'Australia' },
+                    { city: 'Toronto', country: 'Canada' },
+                    { city: 'Berlin', country: 'Germany' },
+                    { city: 'Paris', country: 'France' },
+                    { city: 'Singapore', country: 'Singapore' },
+                    { city: 'Mumbai', country: 'India' },
+                    { city: 'São Paulo', country: 'Brazil' }
+                ];
+                
+                return cities[Math.floor(Math.random() * cities.length)];
+            }
+            
+            // Helper functions to parse user agent (simplified for demo)
+            function getBrowserName(userAgent) {
+                if (userAgent.includes('Chrome')) return 'Chrome';
+                if (userAgent.includes('Firefox')) return 'Firefox';
+                if (userAgent.includes('Safari')) return 'Safari';
+                if (userAgent.includes('Edge')) return 'Edge';
+                return 'Browser';
+            }
+            
+            function getDeviceType(userAgent) {
+                if (userAgent.includes('Mobile')) return 'Mobile';
+                if (userAgent.includes('Tablet')) return 'Tablet';
+                return 'Desktop';
+            }
+            
+            function getDeviceIcon(userAgent) {
+                if (userAgent.includes('iPhone') || userAgent.includes('Android')) {
+                    return '<svg class="inline w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7 2a2 2 0 00-2 2v12a2 2 0 002 2h6a2 2 0 002-2V4a2 2 0 00-2-2H7zm3 14a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path></svg>';
+                } else if (userAgent.includes('iPad') || userAgent.includes('Tablet')) {
+                    return '<svg class="inline w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zm4 14a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path></svg>';
+                } else {
+                    return '<svg class="inline w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M11.17 3a1 1 0 01.83.83V17a1 1 0 01-1 1H3a1 1 0 01-1-1V4a1 1 0 011-1h8.17zM4 16h6V5H4v11zm11-6a1 1 0 100-2h-1v2h1z" clip-rule="evenodd"></path></svg>';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
